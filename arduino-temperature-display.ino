@@ -3,7 +3,10 @@
 #define SHIFT_CLOCK 3
 #define STORE 4
 
-const unsigned long DELAY = 30000;
+const unsigned long DELAY = 20000;
+
+// Measured voltage (in mV) of the INTERNAL analog voltage reference.
+const float INTERNAL_VOLTAGE_MV = 1053.0;
 
 const byte segments[10] = {
     // Bit order: EDC.BAFG
@@ -38,6 +41,9 @@ byte setDecimalPoint(byte pattern) {
 }
 
 void setup() {
+  // Use the internal ~1.1 volt reference
+  // Actually 1.053v on my Metro Mini.
+  analogReference(INTERNAL);
   pinMode(TEMP_INPUT, INPUT);
   pinMode(SHIFT_DATA, OUTPUT);
   pinMode(SHIFT_CLOCK, OUTPUT);
@@ -46,10 +52,9 @@ void setup() {
 }
 
 int readTemperatureInTenthsC() {
-  // This only gives the temperature in about 0.5C increments.
-  // I think this is due to the limited precision of the ADC.
   int raw = analogRead(TEMP_INPUT);
-  float tenths = raw * (5000 / 1023.0) - 500;
+  float mv = raw * (INTERNAL_VOLTAGE_MV / 1023.0);
+  float tenths = mv - 500;
   return (int) tenths;
 }
 
