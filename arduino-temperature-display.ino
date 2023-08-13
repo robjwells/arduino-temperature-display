@@ -40,6 +40,13 @@ byte setDecimalPoint(byte pattern) {
     return pattern & pointOnly;
 }
 
+int readTemperatureInTenthsC() {
+  int raw = analogRead(TEMP_INPUT);
+  float mv = raw * (INTERNAL_VOLTAGE_MV / 1023.0);
+  float tenths = mv - 500;
+  return (int) tenths;
+}
+
 int buffer[DELAY_SECONDS];
 
 void setup() {
@@ -51,13 +58,6 @@ void setup() {
   pinMode(SHIFT_CLOCK, OUTPUT);
   pinMode(STORE, OUTPUT);
   digitalWrite(STORE, LOW);
-}
-
-int readTemperatureInTenthsC() {
-  int raw = analogRead(TEMP_INPUT);
-  float mv = raw * (INTERNAL_VOLTAGE_MV / 1023.0);
-  float tenths = mv - 500;
-  return (int) tenths;
 }
 
 void loop() {
