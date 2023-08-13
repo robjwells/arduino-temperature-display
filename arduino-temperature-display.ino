@@ -3,7 +3,7 @@
 #define SHIFT_CLOCK 3
 #define STORE 4
 
-const unsigned long DELAY = 20000;
+const int DELAY_SECONDS = 60;
 
 // Measured voltage (in mV) of the INTERNAL analog voltage reference.
 const float INTERNAL_VOLTAGE_MV = 1053.0;
@@ -40,6 +40,8 @@ byte setDecimalPoint(byte pattern) {
     return pattern & pointOnly;
 }
 
+int buffer[DELAY_SECONDS];
+
 void setup() {
   // Use the internal ~1.1 volt reference
   // Actually 1.053v on my Metro Mini.
@@ -59,7 +61,16 @@ int readTemperatureInTenthsC() {
 }
 
 void loop() {
-  int tenthsC = readTemperatureInTenthsC();
+  for (int idx = 0; idx < DELAY_SECONDS; idx++) {
+    buffer[idx] = readTemperatureInTenthsC();
+    delay(1000);
+  }
+
+  int average = 0;
+  for (int idx = 0; idx < DELAY_SECONDS; idx++) {
+    average += buffer[idx];
+  }
+  int tenthsC = average / DELAY_SECONDS;
   byte tensPlace = tenthsC / 100;
   byte onesPlace = tenthsC / 10 % 10;
   byte tenthsPlace = tenthsC % 10;
@@ -73,6 +84,4 @@ void loop() {
   digitalWrite(STORE, HIGH);
   delay(1);
   digitalWrite(STORE, LOW);
-  
-  delay(DELAY);
 }
