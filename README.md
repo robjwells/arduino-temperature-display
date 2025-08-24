@@ -14,7 +14,13 @@ you'll only be able to measure in roughly 0.5°C increments.
 
 [measure]: https://forum.arduino.cc/t/measurement-of-bandgap-voltage/38215/4
 
+Here's the circuit in action:
+
 <img alt="The temperature display circuit built on a breadboard." src="Photo.jpg"/>
+
+And in daylight to make the wiring a bit clearer:
+
+<img alt="The circuit in daylight" src="Photo-daylight.jpg"/>
 
 ### Breadboard wiring
 
