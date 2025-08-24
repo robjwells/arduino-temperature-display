@@ -60,11 +60,11 @@ void writeResetPattern() {
     // X-like pattern
     const byte resetSequence[] = {
         // Bit order: EDC.BAFG
-        // AG
+        // DA
         0b10111011,
         // G
         0b11111110,
-        // AG
+        // DA
         0b10111011,
     };
 
